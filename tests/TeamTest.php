@@ -16,6 +16,7 @@ class TeamTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        $this->factory = new WorldCupBusinessFactory();
     }
 
     /**
@@ -25,6 +26,10 @@ class TeamTest extends TestCase
      */
     public function minusScore(): void
     {
+        $this->expectException(NegativeResultException::class);
+        $team = $this->factory->createTeam("Poland");
+
+        $team->removeGoal();
     }
 
     /**
@@ -34,6 +39,8 @@ class TeamTest extends TestCase
      */
     public function emptyName(): void
     {
+        $this->expectException(EmptyNameException::class);
+        $this->factory->createTeam("");
     }
 
     /**
@@ -43,5 +50,16 @@ class TeamTest extends TestCase
      */
     public function checkScore(): void
     {
+        $team = $this->factory->createTeam("Poland");
+
+        $this->assertEquals(0,$team->getScore());
+        $team->addGoal();
+        $team->addGoal();
+        $this->assertEquals(2,$team->getScore());
+        $team->addGoal();
+        $team->addGoal();
+        $this->assertEquals(4,$team->getScore());
+        $team->removeGoal();
+        $this->assertEquals(3,$team->getScore());
     }
 }
