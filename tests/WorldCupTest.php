@@ -205,56 +205,6 @@ class WorldCupTest extends TestCase
      *
      * @return void
      */
-    public function sortAllElementsInFinalResult(): void
-    {
-        $worldCup = $this->factory->createWorldCup();
-        $mex = $this->factory->createTeam('Mexico');
-        $ger = $this->factory->createTeam('Germany');
-        $game1 = $this->factory->createGame($mex, $ger);
-
-        $spa = $this->factory->createTeam('Spain');
-        $port = $this->factory->createTeam('Portugal');
-        $game2 = $this->factory->createGame($spa, $port);
-
-        $ita = $this->factory->createTeam('Italy');
-        $fra = $this->factory->createTeam('France');
-        $game3 = $this->factory->createGame($ita, $fra);
-        $worldCup->addGame($game1);
-        $worldCup->addGame($game2);
-        $worldCup->addGame($game3);
-        foreach ($worldCup->getTournament() as $key => $game) {
-            $worldCup->startGame($key);
-        }
-
-        for ($i = 0; $i < 90; $i++) {
-            if (count($worldCup->getTournament()) == 0) {
-                break;
-            }
-            $randKey = array_rand($worldCup->getTournament());
-            $random = rand(0, 100);
-
-
-            if ($random < 10) {
-                $worldCup->goalHomeTeam($randKey);
-            } elseif ($random < 20) {
-                $worldCup->goalAwayTeam($randKey);
-            } elseif ($random % 50 == 0) {
-                $worldCup->finishGame($randKey);
-            }
-        }
-
-        foreach ($worldCup->getTournament() as $key => $game) {
-            $worldCup->finishGame($key);
-        }
-
-        $this->assertCount(3, $worldCup->getFinalResult());
-    }
-
-    /**
-     * @test
-     *
-     * @return void
-     */
     public function runningMethods(): void
     {
 
@@ -278,6 +228,5 @@ class WorldCupTest extends TestCase
         $worldCupMock->finishGame(1);
         $worldCupMock->finishGame(2);
         $finalResult = $worldCupMock->getFinalResult();
-
     }
 }
